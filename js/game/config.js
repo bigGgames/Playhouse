@@ -1,8 +1,11 @@
-// set the JSM path so we can load our js/module files
-var jsmPath = 'js/';
+// create the Playhouse global var
+if ( window.ph )
+	throw 'Playhouse global var "ph" can\'t be created?!';
+
+window.ph = {};
 
 // our game/playhouse config
-var phConfig = 
+ph.config =
 {
 	gameDimensions :
 	{
