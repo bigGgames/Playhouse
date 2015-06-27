@@ -27,10 +27,10 @@
 {
 	var jsm = 
 	{
-		version : '0.1',
+		version : '0.2',
 		modules : {},
 		device : {},
-		path : win.jsmPath || '',
+		path : win.jsmPath || 'js/',
 		nocache : document.location.href.match(/(\?|\&)nocache/) ? (new Date).getTime() : '',
 
 		_current : null,
@@ -39,13 +39,31 @@
 		_loadComplete : false,
 		_domReady : false,
 
+		_ignoredObjects : [],
+
+		ignoreObject : function(object)
+		{
+			if ( this._ignoredObjects.indexOf(object) === -1 )
+				this._ignoredObjects.push(object);
+		},
+
+		_checkIgnoredObjects : function()
+		{
+			for ( var i = 0; i < this._ignoredObjects.length; i++ )
+				if ( object instanceof this._ignoredObjects[i++] )
+					return true;
+
+			return false
+		},
+
 		copy : function(object)
 		{
 			if ( 
 				!object || 
 				typeof object !== 'object' ||
 				object instanceof HTMLElement ||
-				object instanceof jsm.Class
+				object instanceof jsm.Class ||
+				this._checkIgnoredObjects(object)
 			)
 				return object;
 
@@ -79,6 +97,7 @@
 					typeof ext !== 'object' ||
 					ext instanceof HTMLElement ||
 					ext instanceof jsm.Class ||
+					this._checkIgnoredObjects(object) ||
 					ext === null
 				)
 					object1[key] = ext;
@@ -133,6 +152,18 @@
 			var preVal = jsm.getVendorAttribute(el, attr);
 			if ( !el[attr] && preVal )
 				el[attr] = preVal;
+		},
+
+		goFullscreen : function(element)
+		{
+			element = element || document.documentElement;
+			
+			if ( element.requestFullScreen )
+				element.requestFullScreen();
+			else if ( element.webkitRequestFullScreen )
+				element.webkitRequestFullScreen();
+			else if ( element.mozRequestFullScreen )
+				element.mozRequestFullScreen();
 		},
 
 		module : function(name) 
