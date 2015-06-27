@@ -25638,3 +25638,18 @@ createjs.indexOf = function (array, searchElement){
 	s.buildDate = /*=date*/"Thu, 21 May 2015 16:17:37 GMT"; // injected by build process
 
 })();
+
+
+// must do this for JSM and Playhouse
+jsm.module(
+	'lib.create'
+)
+.defines(function()
+{
+	if ( !window.cjs )
+		window.cjs = createjs;
+
+	cjs.DisplayObject.prototype.zIndex = 0;
+	cjs.DisplayObject.prototype.mouseEnabled = false;
+	cjs.Container.prototype.distance = 1;
+});
