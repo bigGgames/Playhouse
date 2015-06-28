@@ -3,8 +3,10 @@ jsm.module(
 )
 .requires(
 	'playhouse.input',
-	'playhouse.timer',
 	'playhouse.loader',
+	'playhouse.timer',
+	'playhouse.scene',
+	'playhouse.session',
 	'playhouse.spritesheet'
 )
 .defines(function()

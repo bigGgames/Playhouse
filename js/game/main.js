@@ -19,9 +19,7 @@ jsm.module(
 		{
 			ph.game = this;
 
-			alert('Welcome to the Playhouse... not much at the moment, sorry');
-
-			
+			alert('Welcome to the Playhouse!');
 		},
 
 		update : function()

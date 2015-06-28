@@ -3,7 +3,7 @@ jsm.module(
 )
 .defines(function()
 {
-	ph.Storage = jsm.Class.extend(
+	ph.Session = jsm.Class.extend(
 	{
 		hasLocalStorage : true,
 

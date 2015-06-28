@@ -2,7 +2,8 @@ jsm.module(
 	'playhouse.scene'
 )
 .requires(
-	'lib.create'
+	'lib.create',
+	'playhouse.actor'
 )
 .defines(function()
 {
@@ -79,7 +80,7 @@ jsm.module(
 
 		getContainer : function(container)
 		{
-			for ( var i = 0, con; con = this.containers[i++] )
+			for ( var i = 0, con; con = this.containers[i++]; )
 				if ( con.name === container || con === container )
 					return con;
 
