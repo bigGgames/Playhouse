@@ -2,8 +2,7 @@ jsm.module(
 	'game.main'
 )
 .requires(
-	'lib.create',
-
+	'game.assets',
 	'playhouse.system'
 )
 .defines(function()
@@ -28,5 +27,8 @@ jsm.module(
 		}
 	})
 
-	new ph.System(ph.Game, ph.config.gameDimensions)
+	ph.loader.load(ph.assets('prereq'), function()
+	{
+		new ph.System(ph.Game, ph.config.gameDimensions)
+	})
 });
