@@ -29,6 +29,15 @@ jsm.module(
 		{
 			if ( !this.get(name) )
 			{
+				// was a spritesheet created outside?
+				if ( atlas instanceof createjs.SpriteSheet )
+				{
+					this.sheets[name] = atlas;
+					return this;
+				}
+
+				// we make one provided by the passed params
+
 				var data = ph.loader.getResult(atlas);
 
 				data.images.length = 0;
@@ -44,4 +53,6 @@ jsm.module(
 			return this
 		}
 	});
+
+	new ph.SpriteSheet;
 });
