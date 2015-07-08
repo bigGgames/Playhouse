@@ -47,8 +47,8 @@ jsm.module(
 
 			this.scale = scale || this.scale;
 			this.widthMin = gameDim && gameDim.widthMin || this.widthMin;
-			this.widthMax = gameDim && gameDim.heightMax || this.widthMax;
-			this.widthMin = gameDim && gameDim.widthMin || this.heightMin;
+			this.widthMax = gameDim && gameDim.widthMax || this.widthMax;
+			this.heightMin = gameDim && gameDim.heightMin || this.heightMin;
 			this.heightMax = gameDim && gameDim.heightMax || this.heightMax;
 
 			this.setupElements();
@@ -220,6 +220,27 @@ jsm.module(
 		},
 
 		onPageShow : function() { this.isFocused = true },
-		onPageHide : function() { this.isFocused = false }
+		onPageHide : function() { this.isFocused = false },
+
+		imageSmoothingEnabled : function(flag)
+		{
+			jsm.setVendorAttribute(this.canvas.getContext('2d'), 'imageSmoothingEnabled', flag);
+
+			if ( flag )
+			{
+				this.canvas.style.imageRendering = '';
+				this.canvas.style.msInterpolationMode = '';
+				this.stage.snapToPixelEnabled = false;
+			}
+			else
+			{
+				this.canvas.style.imageRendering = '-moz-crisp-edges';
+				this.canvas.style.imageRendering = '-o-crisp-edges';
+				this.canvas.style.imageRendering = '-webkit-optimize-contrast';
+				this.canvas.style.imageRendering = 'crisp-edges';
+				this.canvas.style.msInterpolationMode = 'nearest-neighbor';
+				this.stage.snapToPixelEnabled = true;
+			}
+		}
 	})
 });
