@@ -18,8 +18,8 @@ jsm.module(
 
 		init : function(x, y, options)
 		{
-			this.x = x;
-			this.y = y;
+			this.x = x || this.x;
+			this.y = y || this.y;
 			jsm.merge(this, options || {});
 		},
 
