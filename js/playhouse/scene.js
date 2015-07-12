@@ -53,7 +53,7 @@ jsm.module(
 				actor.switchState(newStateId, this.currentStateId);
 
 				// just in case that actor was immediately removed
-				if ( actor !== this.actors[i] )
+				if ( actor !== this.actors[i - 1] )
 					i--;
 			}
 
