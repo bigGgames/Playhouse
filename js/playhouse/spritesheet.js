@@ -45,7 +45,7 @@ jsm.module(
 				images = typeof images === 'string' ? [images] : images;
 
 				for ( var i = 0; i < images.length; i++ )
-					data.images.push( ph.loader.getResult(atlas) );
+					data.images.push( ph.loader.getResult(images[i]) );
 
 				this.sheets[name] = new createjs.SpriteSheet(data);
 			}
