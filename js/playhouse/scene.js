@@ -130,7 +130,7 @@ jsm.module(
 		addActor : function(type, x, y, options)
 		{
 			if ( !type )
-				throw 'Can\t add actor of type "' + type + '"';
+				throw 'Can\'t add actor of type "' + type + '"';
 
 			var actor = new type(x, y, options);
 

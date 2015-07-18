@@ -97,7 +97,7 @@
 					typeof ext !== 'object' ||
 					ext instanceof HTMLElement ||
 					ext instanceof jsm.Class ||
-					this._checkIgnoredObjects(object) ||
+					this._checkIgnoredObjects(ext) ||
 					ext === null
 				)
 					object1[key] = ext;
