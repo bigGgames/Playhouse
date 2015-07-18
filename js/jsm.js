@@ -107,7 +107,7 @@
 					if ( !object1[key] || typeof object1[key] !== 'object' )
 						object1[key] = ext instanceof Array ? [] : {};
 
-					jsm.merge(object1, key);
+					jsm.merge(object1[key], ext);
 				}
 			}
 
