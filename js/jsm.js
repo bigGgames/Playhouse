@@ -47,7 +47,7 @@
 				this._ignoredObjects.push(object);
 		},
 
-		_checkIgnoredObjects : function()
+		_checkIgnoredObjects : function(object)
 		{
 			for ( var i = 0; i < this._ignoredObjects.length; i++ )
 				if ( object instanceof this._ignoredObjects[i++] )
