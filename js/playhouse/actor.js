@@ -57,7 +57,7 @@ jsm.module(
 		onClick : function() {},
 		onMousedown : function() {},
 		onMouseover : function() {},
-		onMosueout : function() {},
+		onMouseout : function() {},
 		onPressup : function() {},
 	})
 });
