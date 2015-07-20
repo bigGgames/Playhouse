@@ -202,10 +202,10 @@ jsm.module(
 		dispose : function()
 		{
 			while ( this.actors.length )
-				this.actors.pop().kill();
+				this.actors[0].kill();
 
 			while ( this.containers.length )
-				this.removeContainer(this.containers.pop());
+				this.removeContainer(this.containers[0]);
 
 			ph.scene = null
 		},
