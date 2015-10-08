@@ -104,6 +104,7 @@ jsm.module(
 		bindings : {},
 		actions : {},
 		presses : {},
+		locks : {},
 		delayedKeyup : {},
 		
 		isUsingMouse : false,
@@ -232,9 +233,11 @@ jsm.module(
 			if ( action ) 
 			{
 				this.actions[action] = true;
-
-				if ( !this.presses[action] ) 
+				if ( !this.locks[action] ) 
+				{
 					this.presses[action] = true;
+					this.locks[action] = true;
+				}
 
 				if ( code > 0 )
 				{
@@ -323,6 +326,7 @@ jsm.module(
 			for ( action in this.delayedKeyup )
 			{
 				this.actions[action] = false;
+				this.locks[action] = false;
 				delete this.delayedKeyup[action];
 			}
 

@@ -19,7 +19,7 @@ jsm.module(
 		{
 			ph.session = this;
 
-			this.hasLocalStorage = !(typeof window.localStorage === 'undefined')
+			this.hasLocalStorage = typeof window.localStorage !== 'undefined';
 		},
 
 		set : function(name, value, days)
@@ -41,7 +41,7 @@ jsm.module(
 				if ( !days )
 					days = this.expires;
 
-				var date = new Date()
+				var date = new Date();
 				date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
 
 				var expires = "; expires=" + date.toGMTString();
@@ -97,5 +97,5 @@ jsm.module(
 		}
 	});
 
-	new ph.Session
+	new ph.Session();
 });

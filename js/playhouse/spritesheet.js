@@ -27,32 +27,35 @@ jsm.module(
 
 		set : function(name, atlas, images)
 		{
-			if ( !this.get(name) )
+			var ss = this.get(name);
+
+			if ( !ss )
 			{
 				// was a spritesheet created outside?
 				if ( atlas instanceof createjs.SpriteSheet )
-				{
-					this.sheets[name] = atlas;
-					return this;
-				}
+					ss = atlas;
 
 				// we make one provided by the passed params
+				else
+				{
+					var data = ph.loader.getResult(atlas);
 
-				var data = ph.loader.getResult(atlas);
+					data.images.length = 0;
 
-				data.images.length = 0;
+					images = typeof images === 'string' ? [images] : images;
 
-				images = typeof images === 'string' ? [images] : images;
+					for ( var i = 0; i < images.length; i++ )
+						data.images.push( ph.loader.getResult(images[i]) );
 
-				for ( var i = 0; i < images.length; i++ )
-					data.images.push( ph.loader.getResult(images[i]) );
+					ss = new createjs.SpriteSheet(data);
+				}
 
-				this.sheets[name] = new createjs.SpriteSheet(data);
+				this.sheets[name] = ss;
 			}
 
-			return this
+			return ss
 		}
 	});
 
-	new ph.SpriteSheet;
+	new ph.SpriteSheet();
 });

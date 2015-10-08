@@ -9,7 +9,8 @@ jsm.module(
 	'playhouse.timer',
 	'playhouse.scene',
 	'playhouse.session',
-	'playhouse.spritesheet'
+	'playhouse.spritesheet',
+	'playhouse.container'
 )
 .defines(function()
 {
@@ -176,7 +177,7 @@ jsm.module(
 				canWidth = this.widthMin,
 				canHeight = this.heightMin,
 				scale,
-				element = this.wrapper || this.canvas;
+				styleObj = this.wrapper ? this.wrapper.style : this.canvas.style;
 
 			if ( widthScale > heightScale ) 
 			{
@@ -210,37 +211,16 @@ jsm.module(
 			scale = widthScale > heightScale ? winHeight / canHeight : winWidth / canWidth;
 
 			// set some styles so the wrapper/canvas is in the middle
-			element.style.maxWidth = element.style.maxHeight = element.style.margin = '';
-			element.style.width = ~~(canWidth * scale) + 'px';
-			element.style.height = ~~(canHeight * scale) + 'px';
-			element.style.marginTop = ~~((winHeight - (canHeight * scale)) * 0.5) + 'px';
+			styleObj.maxWidth = styleObj.maxHeight = styleObj.margin = '';
+			styleObj.width = ~~(canWidth * scale) + 'px';
+			styleObj.height = ~~(canHeight * scale) + 'px';
+			styleObj.marginTop = ~~((winHeight - (canHeight * scale)) * 0.5) + 'px';
 
 			setTimeout(function() { window.scrollTo && window.scrollTo(0, 0) }, 1);
 			this._lastSize = winWidth + winHeight;
 		},
 
 		onPageShow : function() { this.isFocused = true },
-		onPageHide : function() { this.isFocused = false },
-
-		imageSmoothingEnabled : function(flag)
-		{
-			jsm.setVendorAttribute(this.canvas.getContext('2d'), 'imageSmoothingEnabled', flag);
-
-			if ( flag )
-			{
-				this.canvas.style.imageRendering = '';
-				this.canvas.style.msInterpolationMode = '';
-				this.stage.snapToPixelEnabled = false;
-			}
-			else
-			{
-				this.canvas.style.imageRendering = '-moz-crisp-edges';
-				this.canvas.style.imageRendering = '-o-crisp-edges';
-				this.canvas.style.imageRendering = '-webkit-optimize-contrast';
-				this.canvas.style.imageRendering = 'crisp-edges';
-				this.canvas.style.msInterpolationMode = 'nearest-neighbor';
-				this.stage.snapToPixelEnabled = true;
-			}
-		}
+		onPageHide : function() { this.isFocused = false }
 	})
 });
