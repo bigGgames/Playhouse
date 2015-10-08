@@ -17,8 +17,8 @@ ph.module(
 		
 		update : function()
 		{
-			var w2 = ph.system.width * 0.5,
-				h2 = ph.system.height * 0.5,
+			var w = ig.system.width,
+				h = ig.system.height,
 				i = 0,
 				con;
 
@@ -27,10 +27,10 @@ ph.module(
 				con = this.containers[i];
 
 				if ( typeof con.screenX === 'number' )
-					con.x = w2 * con.screenX;
+					con.x = w * con.screenX;
 
 				if ( typeof con.screenY === 'number' )
-					con.y = h2 * con.screenY;
+					con.y = h * con.screenY;
 			}
 		},
 
