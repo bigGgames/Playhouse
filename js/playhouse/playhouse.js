@@ -1,36 +1,11 @@
-/*
-* Copyright (c) 2010 big G games.
-*
-* Permission is hereby granted, free of charge, to any person
-* obtaining a copy of this software and associated documentation
-* files (the "Software"), to deal in the Software without
-* restriction, including without limitation the rights to use,
-* copy, modify, merge, publish, distribute, sublicense, and/or sell
-* copies of the Software, and to permit persons to whom the
-* Software is furnished to do so, subject to the following
-* conditions:
-*
-* The above copyright notice and this permission notice shall be
-* included in all copies or substantial portions of the Software.
-*
-* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-* EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
-* OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-* NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
-* HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
-* WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-* FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-* OTHER DEALINGS IN THE SOFTWARE.
-*/
-
 (function(win)
 {
-	var jsm = 
+	var ph = 
 	{
-		version : '0.2',
+		version : '0.3',
 		modules : {},
 		device : {},
-		path : win.jsmPath || 'js/',
+		path : win.phPath || 'js/',
 		nocache : document.location.href.match(/(\?|\&)nocache/) ? (new Date).getTime() : '',
 
 		_current : null,
@@ -62,7 +37,7 @@
 				!object || 
 				typeof object !== 'object' ||
 				object instanceof HTMLElement ||
-				object instanceof jsm.Class ||
+				object instanceof ph.Class ||
 				this._checkIgnoredObjects(object)
 			)
 				return object;
@@ -72,14 +47,14 @@
 				var objects = [], i = 0, obj;
 
 				for ( ; obj = object[i++]; )
-					objects.push( jsm.copy(obj) );
+					objects.push( ph.copy(obj) );
 			}
 			else
 			{
 				var objects = {}, obj;
 
 				for ( obj in object )
-					objects[obj] = jsm.copy(object[obj]);
+					objects[obj] = ph.copy(object[obj]);
 			}
 
 			return objects
@@ -96,7 +71,7 @@
 				if (
 					typeof ext !== 'object' ||
 					ext instanceof HTMLElement ||
-					ext instanceof jsm.Class ||
+					ext instanceof ph.Class ||
 					this._checkIgnoredObjects(ext) ||
 					ext === null
 				)
@@ -107,7 +82,7 @@
 					if ( !object1[key] || typeof object1[key] !== 'object' )
 						object1[key] = ext instanceof Array ? [] : {};
 
-					jsm.merge(object1[key], ext);
+					ph.merge(object1[key], ext);
 				}
 			}
 
@@ -135,6 +110,13 @@
 			return values
 		},
 
+		getUrlVar : function(name)
+		{
+			var vars = {};
+			window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m, key, value) { vars[key] = value });
+			return vars[name] || null
+		},
+
 		setVendorAttribute : function(el, attr, val)
 		{
 			var uc = attr.charAt(0).toUpperCase() + attr.substr(1);
@@ -149,7 +131,7 @@
 
 		normalizeVendorAttribute : function(el, attr) 
 		{
-			var preVal = jsm.getVendorAttribute(el, attr);
+			var preVal = ph.getVendorAttribute(el, attr);
 			if ( !el[attr] && preVal )
 				el[attr] = preVal;
 		},
@@ -220,8 +202,8 @@
 			script.src = path;
 			script.onload = function()
 			{
-				jsm._waitForLoad--;
-				jsm._loadModules();
+				ph._waitForLoad--;
+				ph._loadModules();
 			};
 			script.onerror = function()
 			{
@@ -401,12 +383,6 @@
 					return this
 				}
 			})
-
-			Function.prototype.bind = Function.prototype.bind || function(object)
-			{
-				var ftn = this;
-				return function() { return ftn.apply(object, arguments) }
-			}
 		},
 
 		_bootDevice : function()
@@ -535,8 +511,8 @@
 			}
 		};
 
-	jsm.Class = function() {};
-	jsm.Class.extend = function(prop)
+	ph.Class = function() {};
+	ph.Class.extend = function(prop)
 	{
 		var parent = this.prototype,
 			prototype,
@@ -585,7 +561,7 @@
 
 				for ( var p in this )
 					if ( typeof this[p] === 'object' )
-						this[p] = jsm.copy(this[p]);
+						this[p] = ph.copy(this[p]);
 
 				if ( this.init )
 					this.init.apply(this, arguments);
@@ -596,17 +572,21 @@
 
 		Class.prototype = prototype;
 		Class.prototype.constructor = Class;
-		Class.extend = jsm.Class.extend;
+		Class.extend = ph.Class.extend;
 		Class.inject = inject;
 
 		return Class
 	};
 
-	// set jsm as a global
-	if ( !window.jsm )
-		window.jsm = jsm;
+	// mix it in
+	if ( window.PlayhouseMixin )
+		ph.merge(ph, window.PlayhouseMixin);
+
+	// set playhouse as a global
+	if ( !window.ph )
+		window.ph = ph;
 
 	// boot it up!
-	jsm._boot();
+	ph._boot();
 
 })(window);

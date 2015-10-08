@@ -10,4 +10,4 @@ ph.assets = function(name)
 	return manifest
 };
 
-jsm.module('game.assets').defines();
+ph.module('game.assets').defines();

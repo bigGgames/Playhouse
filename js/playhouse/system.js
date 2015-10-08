@@ -1,4 +1,4 @@
-jsm.module(
+ph.module(
 	'playhouse.system'
 )
 .requires(
@@ -10,11 +10,12 @@ jsm.module(
 	'playhouse.scene',
 	'playhouse.session',
 	'playhouse.spritesheet',
-	'playhouse.container'
+	'playhouse.container',
+	'playhouse.music'
 )
 .defines(function()
 {
-	ph.System = jsm.Class.extend(
+	ph.System = ph.Class.extend(
 	{
 		scale : 1,
 		delta : 0,
@@ -92,21 +93,14 @@ jsm.module(
 			ph.input.clearPressed();
 		},
 
-		getUrlVar : function(name)
-		{
-			var vars = {};
-			window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m, key, value) { vars[key] = value });
-			return vars[name] || null
-		},
-
 		setupElements : function()
 		{
-			if ( jsm.device.ejecta )
+			if ( ph.device.ejecta )
 				this.canvas = document.getElementById('canvas');
 
 			else
 			{
-				if ( jsm.device.cocoonJS )
+				if ( ph.device.cocoonJS )
 				{
 					this.canvas = document.createElement('canvas');
 					document.body.appendChild(this.canvas);
@@ -125,13 +119,13 @@ jsm.module(
 
 		setupStage : function()
 		{
-			if ( jsm.device.cocoonJS )
+			if ( ph.device.cocoonJS )
 				this.canvas.style.cssText = 'idtkscale:ScaleAspectFill';
 
 			this.stage = new createjs.Stage(this.canvas);
 			this.stage.preventSelection = false;
 
-			if ( jsm.device.mobile && createjs.Touch.isSupported() )
+			if ( ph.device.mobile && createjs.Touch.isSupported() )
 			{
 				createjs.Touch.enable(this.stage);
 				this.stage.enableDOMEvents(false);

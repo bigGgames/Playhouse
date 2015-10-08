@@ -1,4 +1,4 @@
-jsm.module(
+ph.module(
 	'playhouse.scene'
 )
 .requires(
@@ -6,7 +6,7 @@ jsm.module(
 )
 .defines(function()
 {
-	ph.Scene = jsm.Class.extend(
+	ph.Scene = ph.Class.extend(
 	{
 		x : 0,
 		y : 0,

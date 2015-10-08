@@ -1,4 +1,4 @@
-jsm.module(
+ph.module(
 	'playhouse.spritesheet'
 )
 .requires(
@@ -6,23 +6,21 @@ jsm.module(
 )
 .defines(function()
 {
-	ph.SpriteSheet = jsm.Class.extend(
+	ph.SpriteSheet = ph.Class.extend(
 	{
 		sheets : {},
 
 		staticInit : function()
 		{
-			return ph.spritesheet || null
-		},
+			if ( !ph.spritesheet )
+				ph.spritesheet = this;
 
-		init : function()
-		{
-			ph.spritesheet = this
+			return ph.spritesheet;
 		},
 
 		get : function(name)
 		{
-			return this.sheets[name] || null
+			return this.sheets[name] || null;
 		},
 
 		set : function(name, atlas, images)

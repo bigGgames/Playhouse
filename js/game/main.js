@@ -1,4 +1,4 @@
-jsm.module(
+ph.module(
 	'game.main'
 )
 .requires(
@@ -7,7 +7,7 @@ jsm.module(
 )
 .defines(function()
 {
-	ph.Game = jsm.Class.extend(
+	ph.Game = ph.Class.extend(
 	{
 		staticInit : function()
 		{

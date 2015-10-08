@@ -1,4 +1,4 @@
-jsm.module(
+ph.module(
 	'playhouse.input'
 )
 .defines(function()
@@ -99,7 +99,7 @@ jsm.module(
 		PERIOD : 190
 	};
 
-	ph.Input = jsm.Class.extend(
+	ph.Input = ph.Class.extend(
 	{
 		bindings : {},
 		actions : {},
@@ -118,7 +118,7 @@ jsm.module(
 
 		staticInit : function()
 		{
-			return ph.input || null
+			return ph.input || null;
 		},
 
 		init : function(stage)

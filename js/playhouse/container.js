@@ -1,22 +1,20 @@
-jsm.module(
+ph.module(
 	'playhouse.container'
 )
 .defines(function()
 {
-	ph.Container = jsm.Class.extend(
+	ph.Container = ph.Class.extend(
 	{
 		containers : [],
 
 		staticInit : function()
 		{
-			return ph.con || null;
-		},
+			if ( !ph.container )
+				ph.container = this;
 
-		init : function()
-		{
-			ph.con = this;
+			return ph.container;
 		},
-
+		
 		update : function()
 		{
 			var w2 = ph.system.width * 0.5,

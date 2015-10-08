@@ -1,9 +1,9 @@
-jsm.module(
+ph.module(
 	'playhouse.session'
 )
 .defines(function()
 {
-	ph.Session = jsm.Class.extend(
+	ph.Session = ph.Class.extend(
 	{
 		hasLocalStorage : true,
 
@@ -12,7 +12,7 @@ jsm.module(
 
 		staticInit : function()
 		{
-			return ph.session || null
+			return ph.session || null;
 		},
 
 		init : function()
@@ -32,7 +32,7 @@ jsm.module(
 				} 
 				catch(e)  
 				{
-					if ( e == QUOTA_EXCEEDED_ERR )
+					if ( e === QUOTA_EXCEEDED_ERR )
 						console.log('localStorage quota exceeded');
 				}
 			}

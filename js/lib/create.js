@@ -25641,7 +25641,7 @@ createjs.indexOf = function (array, searchElement){
 
 
 // must do this for JSM and Playhouse
-jsm.module(
+ph.module(
 	'lib.create'
 )
 .defines(function()

@@ -1,9 +1,9 @@
-jsm.module(
+ph.module(
 	'playhouse.timer'
 )
 .defines(function()
 {
-	ph.Timer = jsm.Class.extend(
+	ph.Timer = ph.Class.extend(
 	{
 		target : 0,
 		base : 0,

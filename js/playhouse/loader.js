@@ -1,4 +1,4 @@
-jsm.module(
+ph.module(
 	'playhouse.loader'
 )
 .requires(
@@ -6,7 +6,7 @@ jsm.module(
 )
 .defines(function()
 {
-	ph.Loader = jsm.Class.extend(
+	ph.Loader = ph.Class.extend(
 	{
 		status : 0,
 
@@ -17,7 +17,7 @@ jsm.module(
 
 		staticInit : function()
 		{
-			return ph.loader || null
+			return ph.loader || null;
 		},
 
 		init : function()
@@ -28,7 +28,7 @@ jsm.module(
 			createjs.Sound.alternateExtensions = ['mp3', 'ogg'];
 			createjs.Sound.EXTENSION_MAP.mp3 = 'mpeg';
 
-			if ( jsm.device.mobile && createjs.WebAudioPlugin.isSupported() )
+			if ( ph.device.mobile && createjs.WebAudioPlugin.isSupported() )
 				document.addEventListener('touchstart', function firstTouch()
 				{
 					document.removeEventListener('touchstart', firstTouch, false);
@@ -53,7 +53,7 @@ jsm.module(
 			for ( i = 0; i < manifest.length; i++ )
 			{
 				// nocache
-				manifest[i].src += jsm.nocache;
+				manifest[i].src += ph.nocache;
 
 				// TODO
 				// scaling

@@ -1,11 +1,7 @@
-// create the Playhouse global var
-if ( window.ph )
-	throw 'Playhouse global var "ph" can\'t be created?!';
-
-window.ph = {};
+window.PlayhouseMixin = window.PlayhouseMixin || {};
 
 // our game/playhouse config
-ph.config =
+window.PlayhouseMixin.config =
 {
 	gameDimensions :
 	{
