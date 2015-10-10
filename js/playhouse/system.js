@@ -26,7 +26,7 @@ ph.module(
 		heightMax : 192,
 
 		delegate : null,
-		stage : null,
+		stages : [],
 
 		isWrongOrientation : false,
 		canvas : null,
@@ -38,7 +38,7 @@ ph.module(
 			return ph.system || null
 		},
 
-		init : function(gameObj, gameDim, scale)
+		init : function(gameClass, gameDim, scale)
 		{
 			if ( !window.createjs )
 				throw 'Where is CreateJS? Go get it...';
@@ -51,93 +51,152 @@ ph.module(
 			this.heightMin = gameDim && gameDim.heightMin || this.heightMin;
 			this.heightMax = gameDim && gameDim.heightMax || this.heightMax;
 
-			this.setupElements();
-			this.setupStage();
+			var resizeWindowBound = this.onWindowResize.bind(this);
+			var pageShowBound = this.onPageShow.bind(this);
+			var pageHideBound = this.onPageHide.bind(this);
+			var changeBound = this.onChange.bind(this);
 
-			this.onPageShowBound = this.onPageShow.bind(this);
-			this.onPageHideBound = this.onPageHide.bind(this);
-			window.addEventListener('pageshow', this.onPageShowBound, false);
-			window.addEventListener('pagehide', this.onPageHideBound, false);
-			window.addEventListener('focus', this.onPageShowBound, false);
-			window.addEventListener('blur', this.onPageHideBound, false);
+			// some window events
+			window.addEventListener('load', resizeWindowBound, false);
+			window.addEventListener('resize', resizeWindowBound, false);
+			window.addEventListener('orientationchange', resizeWindowBound, false);
+			window.addEventListener('pageshow', pageShowBound, false);
+			window.addEventListener('pagehide', pageHideBound, false);
+			window.addEventListener('focus', pageShowBound, false);
+			window.addEventListener('blur', pageHideBound, false);
 
-			this.onWindowResizeBounds = this.onWindowResize.bind(this);
-			window.addEventListener('load', this.onWindowResizeBounds, false);
-			window.addEventListener('resize', this.onWindowResizeBounds, false);
+			var hidden = 'hidden';
+			if ( hidden in document )
+				document.addEventListener('visibilitychange', changeBound);
+			else if ( (hidden = 'mozHidden') in document )
+				document.addEventListener('mozvisibilitychange', changeBound);
+			else if ( (hidden = 'webkitHidden') in document )
+				document.addEventListener('webkitvisibilitychange', changeBound);
+			else if ( (hidden = 'msHidden') in document )
+				document.addEventListener('msvisibilitychange', changeBound);
 
-			// keep this going, because sometimes the orientation event isn't reliable
-			setInterval(this.onWindowResizeBounds, 500);
+			this.hiddenEventType = hidden;
 
 			// we don't like this
 			document.ontouchmove = function(e) { e.preventDefault() };
 
+			// sets the wrapper and/or canvas depending on what we are doing
+			this.setupElements();
+
+			// sets up the createjs stage and init input
+			this.addStage();
+
+			// call this now
+			this.onWindowResize();
+			setInterval(resizeWindowBound, 500);
+
+			// start the ticker!
+			createjs.Ticker.timingMode = createjs.Ticker.RAF;
+			createjs.Ticker.on('tick', this.run, this);
+
 			// start the game already!
-			this.delegate = new gameObj;
+			this.delegate = new gameClass();
 		},
 
 		run : function(e)
 		{
-			if ( !this.isFocused )
-				e.delta = 0;
+			if ( this.isFocused === -1 )
+				return;
+
+			if ( this.isFocused > 0 )
+			{
+				this.isFocused--;
+				return;
+			}
 
 			ph.Timer.step();
 
+			// update the delta
 			this.delta = e.delta * 0.001;
 
-			this.delegate && this.delegate.update(e);
+			// update game
+			this.updateGame(e);
 
-			this.stage && this.stage.update(e);
+			// update the stage
+			this.updateStage(e);
 
+			// input stuff
 			ph.input.clearPressed();
+
+			// wrong orientation?
+			if ( this.isWrongOrientation )
+				this.delegate.run(false);
+		},
+
+		updateGame : function(e)
+		{
+			// run the game
+			if ( this.delegate )
+				this.delegate.run(e);
+		},
+
+		updateStage : function(e)
+		{
+			// update each stage
+			for ( var i = 0; i < this.stages.length; i++ )
+				this.stages[i].update(e);
 		},
 
 		setupElements : function()
 		{
-			if ( ph.device.ejecta )
-				this.canvas = document.getElementById('canvas');
-
-			else
-			{
-				if ( ph.device.cocoonJS )
-				{
-					this.canvas = document.createElement('canvas');
-					document.body.appendChild(this.canvas);
-				}
-				else
-				{
-					this.wrapper = document.getElementById('wrapper') || document.createElement('div');
-					this.wrapper.id = 'wrapper';
-					document.body.appendChild(this.wrapper);
-
-					this.canvas = this.wrapper.getElementsByTagName('canvas')[0] || document.createElement('canvas');
-					this.wrapper.appendChild(this.canvas);
-				}
-			}
+			this.wrapper = ph.$('#game-wrapper') || ph.$new('div');
+			this.wrapper.id = 'game-wrapper';
+			document.body.appendChild(this.wrapper);
 		},
 
-		setupStage : function()
+		// creates a canvas and stage
+		addStage : function()
 		{
-			if ( ph.device.cocoonJS )
-				this.canvas.style.cssText = 'idtkscale:ScaleAspectFill';
+			if ( !this.wrapper )
+				return;
 
-			this.stage = new createjs.Stage(this.canvas);
-			this.stage.preventSelection = false;
+			var canvas = ph.$new('canvas');
+			this.wrapper.appendChild(canvas);
 
+			var stage = new createjs.Stage(canvas);
+			stage.preventSelection = false;
+
+			// enable touch events
 			if ( ph.device.mobile && createjs.Touch.isSupported() )
 			{
-				createjs.Touch.enable(this.stage);
-				this.stage.enableDOMEvents(false);
-				this.stage.snapToPixelEnabled = true;
+				createjs.Touch.enable(stage);
+				stage.enableDOMEvents(false);
+				stage.snapToPixelEnabled = true;
 			}
 			else
-				this.stage.enableMouseOver(30);
+				stage.enableMouseOver(30);
 
-			// start the input
-			new ph.Input(this.stage);
+			// apply input
+			new ph.Input(stage);
 			ph.input.bind(ph.KEY.MOUSE1);
 
-			createjs.Ticker.timingMode = createjs.Ticker.RAF;
-			createjs.Ticker.on('tick', this.run, this);
+			// add to array
+			this.stages.push(stage);
+
+			// make the canvas the same size
+			this._lastSize = 0;
+			this.onWindowResize();
+
+			return stage;
+		},
+
+		removeStage : function(index)
+		{
+			// passed the stage object? find the index
+			if ( isNaN(index) )
+				index = this.stages.indexOf(index);
+
+			// remove the canvas
+			var canvas = this.stages[index].canvas;
+			canvas.parentNode.removeChild(canvas);
+
+			// remove from array
+			this.stages.splice(index, 1);
 		},
 
 		resize : function(width, height, scale)
@@ -212,7 +271,24 @@ ph.module(
 			this._lastSize = winWidth + winHeight;
 		},
 
-		onPageShow : function() { this.isFocused = true },
-		onPageHide : function() { this.isFocused = false }
+		onPageShow : function() 
+		{ 
+			this.isFocused = 1;
+			ph.music.play();
+		},
+
+		onPageHide : function() 
+		{ 
+			this.isFocused = -1;
+			ph.music.pause();
+		},
+
+		onChange : function(e)
+		{
+			if ( document[this.hiddenEventType] )
+				this.onPageHide();
+			else
+				this.onPageShow();
+		}
 	})
 });

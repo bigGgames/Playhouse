@@ -50,7 +50,7 @@ ph.module(
 		{
 			var con = new createjs.Container().set(options || {});
 
-			(parent || ph.system.stage).addChild(con);
+			(parent || ph.system.stages[0]).addChild(con);
 
 			this.containers.push( con );
 

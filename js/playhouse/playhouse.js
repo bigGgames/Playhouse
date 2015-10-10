@@ -110,6 +110,10 @@
 			return values
 		},
 
+		$ : function(selector) { return selector.charAt(0) == '#' ? document.getElementById(selector.substr(1)) : document.getElementsByTagName(selector); },
+
+		$new : function(element) { return document.createElement(element); },
+
 		getUrlVar : function(name)
 		{
 			var vars = {};
