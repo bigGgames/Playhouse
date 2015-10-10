@@ -2,8 +2,6 @@ ph.module(
 	'playhouse.system'
 )
 .requires(
-	'lib.create',
-
 	'playhouse.input',
 	'playhouse.loader',
 	'playhouse.timer',

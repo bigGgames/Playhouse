@@ -31,7 +31,7 @@ ph.module(
 
 		_set : function(id, fadeTime, volume)
 		{
-			this.soundObj = cjs.Sound.play(id, { loop : -1, volume : 0 });
+			this.soundObj = createjs.Sound.play(id, { loop : -1, volume : 0 });
 			this.fadeTo(volume || 1, fadeTime);
 		},
 
@@ -54,7 +54,7 @@ ph.module(
 
 		fadeTo : function(volume, fadeTime)
 		{
-			return cjs.Tween.get(this.soundObj).to({ volume : volume }, fadeTime || 600);
+			return createjs.Tween.get(this.soundObj).to({ volume : volume }, fadeTime || 600);
 		}
 	});
 

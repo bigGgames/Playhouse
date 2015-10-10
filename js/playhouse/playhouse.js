@@ -328,6 +328,12 @@
 				return !!sqrt ? Math.sqrt(dx * dx + dy * dy) : dx * dx + dy * dy
 			}
 
+			Math.angle = function(x1, y1, x2, y2, deg)
+			{
+				var r = Math.atan2(y2 - y1, x2 - x1);
+				return !!deg ? r.toDeg() : r
+			}
+
 			Number.prototype.lerp = function(target, time) { return Math.lerp(this, target, time) }
 
 			Number.prototype.map = function(istart, istop, ostart, ostop) { return ostart + (ostop - ostart) * ((this - istart) / (istop - istart)) }

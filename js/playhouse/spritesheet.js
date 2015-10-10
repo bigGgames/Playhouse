@@ -1,9 +1,6 @@
 ph.module(
 	'playhouse.spritesheet'
 )
-.requires(
-	'lib.create'
-)
 .defines(function()
 {
 	ph.SpriteSheet = ph.Class.extend(

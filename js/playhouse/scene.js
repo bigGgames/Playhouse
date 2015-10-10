@@ -1,9 +1,6 @@
 ph.module(
 	'playhouse.scene'
 )
-.requires(
-	'lib.create'
-)
 .defines(function()
 {
 	ph.Scene = ph.Class.extend(

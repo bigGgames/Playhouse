@@ -3,7 +3,8 @@ ph.module(
 )
 .requires(
 	'game.assets',
-	'playhouse.system'
+	'playhouse.system',
+	'lib.createjs.lib'
 )
 .defines(function()
 {

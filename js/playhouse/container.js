@@ -48,7 +48,7 @@ ph.module(
 
 		add : function(options, parent)
 		{
-			var con = new cjs.Container().set(options || {});
+			var con = new createjs.Container().set(options || {});
 
 			(parent || ph.system.stage).addChild(con);
 
